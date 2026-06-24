@@ -200,7 +200,7 @@
         document.addEventListener('DOMContentLoaded', () => {
             
             // 실제 동작을 위한 구글 스크립트 URL 설정 완료
-            const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwexoS_Vxr3_-0NNhyyXZUPk8hTKaO5x1HoN7ZJoJOpABnN2ZzKxKGaGncerJ-cS8RS/exec'; 
+            const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzl5ThprdQRybHOwABTGew509ujMVrC1KjIG7pvkZLy4tDt_mXV5gtCSh-5g2XejBIv/exec'; 
 
             // --- 1. 순수 텍스트 방문자 카운팅 기능 (페이지 로드 시 즉시 실행) ---
             fetch(GOOGLE_SCRIPT_URL, { method: 'GET' })
@@ -298,6 +298,7 @@
                 fetch(GOOGLE_SCRIPT_URL, {
                     method: 'POST',
                     headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    redirect: 'follow',
                     body: JSON.stringify(data)
                 })
                 .then(res => res.json())
