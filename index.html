@@ -34,11 +34,6 @@
         /* 로딩 스피너 */
         .loader { border: 3px solid rgba(255,255,255,0.3); border-radius: 50%; border-top: 3px solid white; width: 20px; height: 20px; animation: spin 1s linear infinite; display: inline-block; vertical-align: middle; margin-right: 8px;}
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-
-        /* 드래그 확인용 은닉 카운터 스타일 */
-        .secret-counter { opacity: 0.01; user-select: all; transition: opacity 2s ease; cursor: crosshair; }
-        .secret-counter:hover { opacity: 1; transition-delay: 1s; } /* 마우스를 1초 이상 올리면 나타남 */
-        .secret-counter::selection { background: #3617CE; color: #fff; opacity: 1; }
     </style>
 </head>
 <body class="text-gray-800 antialiased min-h-screen flex flex-col items-center py-8 px-4">
@@ -187,12 +182,6 @@
         <p>서울시 마포구 마포대로 144, 7층</p>
         <p class="mt-2 text-[10px] text-gray-300">&copy; F&U Credit Information Co., Ltd. All rights reserved.</p>
 
-    <!-- 은닉형 카운터 (URL 수정 완료) -->
-        <div class="mt-4 flex justify-center">
-            <img src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https://fnu-aicc.github.io/axis2026/&count_bg=%233617CE&title_bg=%23555555&title=VISIT"
-                 class="secret-counter h-5"
-                 alt="숨김카운터" />
-        </div>
     </footer>
 
     <script>
