@@ -177,7 +177,7 @@
         <p>서울시 마포구 마포대로 144, 7층</p>
         <p class="mt-2 text-[10px] text-gray-300">&copy; F&U Credit Information Co., Ltd. All rights reserved.</p>
 
-        <!-- 외부 이미지 없이 자체 구축한 순수 텍스트 형태의 방문자 카운터 -->
+        <!-- 텍스트 기반 방문자 카운터 -->
         <div class="flex justify-center items-center space-x-3 mt-5 text-[10px] text-gray-400 font-medium tracking-wide">
             <p>TODAY <span id="todayCount" class="text-skt font-bold text-xs ml-1">-</span></p>
             <span class="w-px h-3 bg-gray-300"></span>
@@ -188,9 +188,10 @@
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             
-            const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzl5ThprdQRybHOwABTGew509ujMVrC1KjIG7pvkZLy4tDt_mXV5gtCSh-5g2XejBIv/exec'; 
+            // ★ 주의: 반드시 1단계 진행 후 발급받은 '새 배포' URL로 교체하세요.
+            const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx55gq352tdUYSiOdEKgeKFr83TZOraUx3lGyLjQEmYeeBgcXx-kEavI-sJhsWwjdK4/exec'; 
 
-            // --- 1. 순수 텍스트 방문자 카운팅 기능 (페이지 로드 시 즉시 실행) ---
+            // --- 방문자 카운팅 기능 ---
             fetch(GOOGLE_SCRIPT_URL, { method: 'GET' })
                 .then(response => response.json())
                 .then(data => {
@@ -206,7 +207,7 @@
             const otherText = document.getElementById('otherText');
             const toast = document.getElementById('toastMessage');
 
-            // 드롭다운 (보기 버튼) 로직
+            // 드롭다운 로직
             document.querySelectorAll('.dropdown-btn').forEach(btn => {
                 btn.addEventListener('click', function(e) {
                     e.preventDefault();
@@ -215,7 +216,7 @@
                 });
             });
 
-            // 휴대폰 번호 자동 하이픈
+            // 휴대폰 번호 하이픈
             document.getElementById('phone').addEventListener('input', function(e) {
                 let val = this.value.replace(/[^0-9]/g, '');
                 if(val.length > 3 && val.length <= 7) val = val.slice(0,3) + '-' + val.slice(3);
@@ -223,14 +224,14 @@
                 this.value = val;
             });
 
-            // 기타 텍스트박스 활성화 로직
+            // 기타 체크박스
             interestOther.addEventListener('change', function() {
                 otherText.disabled = !this.checked;
                 if(this.checked) otherText.focus();
                 else otherText.value = '';
             });
 
-            // 제출 버튼 로직
+            // 설문 제출 로직
             submitBtn.addEventListener('click', () => {
                 const requiredFields = [
                     {id: 'company', name: '소속 회사'},
@@ -240,7 +241,6 @@
                 ];
                 let hasError = false;
 
-                // 1. 필수 입력칸 빈값 체크
                 for (let field of requiredFields) {
                     const el = document.getElementById(field.id);
                     if (!el.value.trim()) {
@@ -251,7 +251,6 @@
                 }
                 if (hasError) return;
 
-                // 2. 필수 동의 체크
                 const agreeRequired = document.getElementById('agreeRequired');
                 const agreeRequiredContainer = agreeRequired.closest('label');
                 if (!agreeRequired.checked) {
@@ -259,7 +258,6 @@
                     return;
                 }
 
-                // 3. 데이터 수집
                 let interests = [];
                 document.querySelectorAll('input[name="interest"]:checked').forEach(cb => interests.push(cb.value));
                 if(interestOther.checked && otherText.value.trim()) interests.push(otherText.value.trim());
@@ -275,32 +273,33 @@
                     agreeOptional: document.getElementById('agreeOptional').checked ? 'Y' : 'N'
                 };
 
-                // 4. 로딩 UI 표시
                 submitBtn.innerHTML = '<span class="loader"></span> 제출 중...';
                 submitBtn.disabled = true;
                 submitBtn.classList.add('opacity-80', 'cursor-not-allowed');
 
-                // 5. 구글 시트로 전송 (CORS 차단 방어를 위한 no-cors 모드 적용 및 단방향 전송 전환)
+                // 에러 추적이 가능하도록 no-cors 삭제 및 정상 JSON 수신 처리
                 fetch(GOOGLE_SCRIPT_URL, {
                     method: 'POST',
-                    mode: 'no-cors',
                     headers: { 'Content-Type': 'text/plain;charset=utf-8' },
                     body: JSON.stringify(data)
                 })
-                .then(() => {
-                    // 응답 본문을 읽지 않고 성공 처리 (CORS 우회)
-                    showSuccess();
+                .then(res => res.json())
+                .then(response => {
+                    if (response.result === 'success') {
+                        showSuccess();
+                    } else {
+                        throw new Error(response.message);
+                    }
                 })
                 .catch(err => {
                     console.error('Fetch Error:', err);
-                    alert('네트워크 또는 권한 오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
+                    alert('서버 오류가 발생했습니다. 구글 앱스 스크립트 새 배포 상태를 다시 확인해주세요.\n(에러사유: ' + err.message + ')');
                     submitBtn.innerHTML = '<span>설문 제출하고 이벤트 참여하기</span>';
                     submitBtn.disabled = false;
                     submitBtn.classList.remove('opacity-80', 'cursor-not-allowed');
                 });
             });
 
-            // 에러 표시 함수
             function showError(element, msg) {
                 element.scrollIntoView({ behavior: 'smooth', block: 'center' });
                 element.classList.add('error-shake');
@@ -315,7 +314,6 @@
                 }, 2500);
             }
 
-            // 성공 화면 전환 함수
             function showSuccess() {
                 document.getElementById('surveyForm').classList.add('hidden');
                 document.getElementById('successScreen').classList.remove('hidden');
