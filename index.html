@@ -187,20 +187,34 @@
         <p>서울시 마포구 마포대로 144, 7층</p>
         <p class="mt-2 text-[10px] text-gray-300">&copy; F&U Credit Information Co., Ltd. All rights reserved.</p>
 
-        <!-- 방문자 카운터 (상시 노출, 소형화, URL 인코딩 적용) -->
-        <div class="mt-4 flex justify-center opacity-70">
-            <img src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Ffnu-aicc.github.io%2Faxis2026%2F&count_bg=%233617CE&title_bg=%23555555&title=VISIT&edge_flat=true"
-                 class="h-4"
-                 alt="방문자 수 카운터" />
+        <!-- 외부 이미지 없이 자체 구축한 순수 텍스트 형태의 방문자 카운터 -->
+        <div class="flex justify-center items-center space-x-3 mt-5 text-[10px] text-gray-400 font-medium tracking-wide">
+            <p>TODAY <span id="todayCount" class="text-skt font-bold text-xs ml-1">-</span></p>
+            <span class="w-px h-3 bg-gray-300"></span>
+            <p>TOTAL <span id="totalCount" class="text-gray-500 font-bold text-xs ml-1">-</span></p>
         </div>
+
     </footer>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             
             // 실제 동작을 위한 구글 스크립트 URL 설정 완료
-            const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyso4P08e7Zh8Zb-CYAgSvBRbs3rm1W3n0Wr-bJCyp8P1_fy3D8Ohbjshj67WR06GDz/exec'; 
+            const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwexoS_Vxr3_-0NNhyyXZUPk8hTKaO5x1HoN7ZJoJOpABnN2ZzKxKGaGncerJ-cS8RS/exec'; 
 
+            // --- 1. 순수 텍스트 방문자 카운팅 기능 (페이지 로드 시 즉시 실행) ---
+            fetch(GOOGLE_SCRIPT_URL, { method: 'GET' })
+                .then(response => response.json())
+                .then(data => {
+                    if(data.today !== undefined) {
+                        document.getElementById('todayCount').innerText = data.today.toLocaleString();
+                        document.getElementById('totalCount').innerText = data.total.toLocaleString();
+                    }
+                })
+                .catch(err => console.error('방문자 카운트 통신 오류:', err));
+
+
+            
             const submitBtn = document.getElementById('submitBtn');
             const interestOther = document.getElementById('interestOther');
             const otherText = document.getElementById('otherText');
