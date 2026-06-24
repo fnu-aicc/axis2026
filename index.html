@@ -21,24 +21,16 @@
         .checkbox-custom:checked + div { background-color: #3617CE; border-color: #3617CE; }
         .checkbox-custom:checked + div svg { display: block; }
         
-        /* 드롭다운 애니메이션 */
         .dropdown-content { max-height: 0; opacity: 0; overflow: hidden; transition: all 0.3s ease-in-out; }
         .dropdown-content.open { max-height: 300px; opacity: 1; margin-top: 0.5rem; }
         
-        /* 팝업 및 에러 애니메이션 */
         @keyframes slideUp { from { transform: translateY(100%); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
         .toast { animation: slideUp 0.3s ease-out forwards; }
         @keyframes shake { 0%, 100% {transform: translateX(0);} 25% {transform: translateX(-5px);} 75% {transform: translateX(5px);} }
         .error-shake { animation: shake 0.4s ease-in-out; border-color: #EF4444 !important; box-shadow: 0 0 0 1px #EF4444 !important; }
 
-        /* 로딩 스피너 */
         .loader { border: 3px solid rgba(255,255,255,0.3); border-radius: 50%; border-top: 3px solid white; width: 20px; height: 20px; animation: spin 1s linear infinite; display: inline-block; vertical-align: middle; margin-right: 8px;}
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-
-        /* 드래그 확인용 은닉 카운터 스타일 */
-        .secret-counter { opacity: 0.01; user-select: all; transition: opacity 2s ease; cursor: crosshair; }
-        .secret-counter:hover { opacity: 1; transition-delay: 1s; } /* 마우스를 1초 이상 올리면 나타남 */
-        .secret-counter::selection { background: #3617CE; color: #fff; opacity: 1; }
     </style>
 </head>
 <body class="text-gray-800 antialiased min-h-screen flex flex-col items-center py-8 px-4">
@@ -115,7 +107,6 @@
 
             <!-- 약관 동의 -->
             <div class="mt-8 bg-gray-50 rounded-xl border border-gray-200 overflow-hidden">
-                <!-- 필수 동의 -->
                 <div class="border-b border-gray-200">
                     <div class="flex justify-between items-center p-4">
                         <label class="flex items-center cursor-pointer flex-1">
@@ -137,7 +128,6 @@
                     </div>
                 </div>
 
-                <!-- 선택 동의 -->
                 <div>
                     <div class="flex justify-between items-center p-4">
                         <label class="flex items-center cursor-pointer flex-1">
@@ -162,7 +152,7 @@
 
             <!-- 제출 버튼 -->
             <button type="button" id="submitBtn" class="w-full bg-skt hover:bg-skt_light text-white font-bold py-4 rounded-xl mt-6 shadow-lg text-lg transition-all flex items-center justify-center">
-                <span>설문 제출하고 경품 받기</span>
+                <span>설문 제출하고 이벤트 참여하기</span>
             </button>
         </form>
 
@@ -193,13 +183,11 @@
             <span class="w-px h-3 bg-gray-300"></span>
             <p>TOTAL <span id="totalCount" class="text-gray-500 font-bold text-xs ml-1">-</span></p>
         </div>
-
     </footer>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             
-            // 실제 동작을 위한 구글 스크립트 URL 설정 완료
             const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzl5ThprdQRybHOwABTGew509ujMVrC1KjIG7pvkZLy4tDt_mXV5gtCSh-5g2XejBIv/exec'; 
 
             // --- 1. 순수 텍스트 방문자 카운팅 기능 (페이지 로드 시 즉시 실행) ---
@@ -213,8 +201,6 @@
                 })
                 .catch(err => console.error('방문자 카운트 통신 오류:', err));
 
-
-            
             const submitBtn = document.getElementById('submitBtn');
             const interestOther = document.getElementById('interestOther');
             const otherText = document.getElementById('otherText');
@@ -229,7 +215,7 @@
                 });
             });
 
-            // 휴대폰 번호 자동 하이픈 (CX 개선)
+            // 휴대폰 번호 자동 하이픈
             document.getElementById('phone').addEventListener('input', function(e) {
                 let val = this.value.replace(/[^0-9]/g, '');
                 if(val.length > 3 && val.length <= 7) val = val.slice(0,3) + '-' + val.slice(3);
@@ -294,20 +280,20 @@
                 submitBtn.disabled = true;
                 submitBtn.classList.add('opacity-80', 'cursor-not-allowed');
 
-                // 5. 구글 시트로 전송 (CORS 오류 방지를 위해 text/plain 사용 및 방어 코드 삭제)
+                // 5. 구글 시트로 전송 (CORS 차단 방어를 위한 no-cors 모드 적용 및 단방향 전송 전환)
                 fetch(GOOGLE_SCRIPT_URL, {
                     method: 'POST',
+                    mode: 'no-cors',
                     headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-                    redirect: 'follow',
                     body: JSON.stringify(data)
                 })
-                .then(res => res.json())
-                .then(response => {
+                .then(() => {
+                    // 응답 본문을 읽지 않고 성공 처리 (CORS 우회)
                     showSuccess();
                 })
                 .catch(err => {
                     console.error('Fetch Error:', err);
-                    alert('네트워크 또는 권한 오류가 발생했습니다. 구글 앱스 스크립트의 배포 권한이 "모든 사용자(Anyone)"인지 확인해주세요.');
+                    alert('네트워크 또는 권한 오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
                     submitBtn.innerHTML = '<span>설문 제출하고 이벤트 참여하기</span>';
                     submitBtn.disabled = false;
                     submitBtn.classList.remove('opacity-80', 'cursor-not-allowed');
