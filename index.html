@@ -4,20 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>AXIS 2026 | F&U with SKT AICC</title>
-    
-    <script>
-        document.addEventListener('contextmenu', event => event.preventDefault());
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'F12' || 
-               (e.ctrlKey && e.shiftKey && e.key === 'I') || 
-               (e.ctrlKey && e.shiftKey && e.key === 'C') || 
-               (e.ctrlKey && e.shiftKey && e.key === 'J') || 
-               (e.ctrlKey && e.key === 'U')) {
-                e.preventDefault();
-            }
-        });
-    </script>
-
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
@@ -33,27 +19,34 @@
         }
     </script>
     <style>
-        body { font-family: 'Pretendard', sans-serif; background-color: #F3F4F6; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none; -webkit-touch-callout: none; }
-        .input-field { transition: all 0.2s ease; -webkit-user-select: auto; user-select: auto; }
+        body { font-family: 'Pretendard', sans-serif; background-color: #F3F4F6; }
+        
+        .input-field { transition: all 0.2s ease; }
         .input-field:focus { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(54, 23, 206, 0.1); }
+        
         .checkbox-custom:checked + div { background-color: #3617CE; border-color: #3617CE; }
         .checkbox-custom:checked + div svg { display: block; }
+
         .chip-checkbox:checked + div { background-color: #3617CE; border-color: #3617CE; color: white; box-shadow: 0 4px 10px rgba(54, 23, 206, 0.2); }
         .chip-checkbox:checked + div svg { color: white; }
         .chip-checkbox:checked + div .icon-bg { background-color: rgba(255, 255, 255, 0.2); }
+        
         .dropdown-content { max-height: 0; opacity: 0; overflow: hidden; transition: all 0.3s ease-in-out; }
         .dropdown-content.open { max-height: 300px; opacity: 1; padding-top: 0.5rem; padding-bottom: 0.5rem; }
+        
         @keyframes slideUp { from { transform: translate(-50%, 100%); opacity: 0; } to { transform: translate(-50%, 0); opacity: 1; } }
         .toast { animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
         @keyframes shake { 0%, 100% {transform: translateX(0);} 25% {transform: translateX(-5px);} 75% {transform: translateX(5px);} }
         .error-shake { animation: shake 0.4s ease-in-out; border-color: #EF4444 !important; box-shadow: 0 0 0 1px #EF4444 !important; }
+
         .loader { border: 3px solid rgba(255,255,255,0.3); border-radius: 50%; border-top: 3px solid white; width: 20px; height: 20px; animation: spin 1s linear infinite; display: inline-block; vertical-align: middle; margin-right: 8px;}
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
         .ticket-cutout-left { left: -12px; top: 50%; transform: translateY(-50%); }
         .ticket-cutout-right { right: -12px; top: 50%; transform: translateY(-50%); }
     </style>
 </head>
-<body class="text-gray-800 antialiased min-h-screen flex flex-col items-center sm:py-8 sm:px-4" oncontextmenu="return false" ondragstart="return false" onselectstart="return false">
+<body class="text-gray-800 antialiased min-h-screen flex flex-col items-center sm:py-8 sm:px-4">
 
     <div id="toastMessage" class="fixed bottom-8 left-1/2 transform -translate-x-1/2 bg-gray-800/90 backdrop-blur text-white px-6 py-3 rounded-full shadow-2xl text-sm font-semibold hidden z-50 transition-all duration-300 whitespace-nowrap">
         입력되지 않은 항목이 있습니다.
@@ -228,6 +221,7 @@
                 <div class="bg-gradient-to-br from-skt to-skt_light p-6 text-center text-white relative">
                    <p class="text-xs font-bold tracking-widest opacity-80 mb-1">AXIS 2026</p>
                    <h2 class="text-2xl font-black tracking-tight">이벤트 응모권</h2>
+                   
                    <div class="absolute ticket-cutout-left w-6 h-6 bg-gray-50 rounded-full shadow-inner"></div>
                    <div class="absolute ticket-cutout-right w-6 h-6 bg-gray-50 rounded-full shadow-inner"></div>
                 </div>
@@ -257,119 +251,172 @@
     </footer>
 
     <script>
-        const u = 'https://script.google.com/macros/s/AKfycbwlaNBBYHIuEu_o-sfRWKuQfMi7Pkep8TUZQDG5f8KSg0xqxSBicz-ndGmaBUdOtg5O/exec'; 
+        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwlaNBBYHIuEu_o-sfRWKuQfMi7Pkep8TUZQDG5f8KSg0xqxSBicz-ndGmaBUdOtg5O/exec'; 
 
         document.addEventListener('DOMContentLoaded', () => {
-            const b = document.getElementById('submitBtn');
-            const io = document.getElementById('interestOther');
-            const ot = document.getElementById('otherText');
-            const t = document.getElementById('toastMessage');
-            const ao = document.getElementById('agreeOptional');
-            const oc = document.getElementById('optContainer');
+            const submitBtn = document.getElementById('submitBtn');
+            const interestOther = document.getElementById('interestOther');
+            const otherText = document.getElementById('otherText');
+            const toast = document.getElementById('toastMessage');
+            const agreeOptional = document.getElementById('agreeOptional');
+            const optContainer = document.getElementById('optContainer');
 
             document.querySelectorAll('.dropdown-btn').forEach(btn => {
                 btn.addEventListener('click', function(e) {
                     e.preventDefault();
-                    const tid = this.getAttribute('data-target');
-                    document.getElementById(tid).classList.toggle('open');
-                    this.innerText = document.getElementById(tid).classList.contains('open') ? '닫기' : '상세보기';
+                    const targetId = this.getAttribute('data-target');
+                    document.getElementById(targetId).classList.toggle('open');
+                    this.innerText = document.getElementById(targetId).classList.contains('open') ? '닫기' : '상세보기';
                 });
             });
 
-            ao.addEventListener('change', function() {
-                if(this.checked) { oc.classList.add('bg-indigo-50/50'); } else { oc.classList.remove('bg-indigo-50/50'); }
+            agreeOptional.addEventListener('change', function() {
+                if(this.checked) {
+                    optContainer.classList.add('bg-indigo-50/50');
+                } else {
+                    optContainer.classList.remove('bg-indigo-50/50');
+                }
             });
 
             document.getElementById('phone').addEventListener('input', function(e) {
-                let v = this.value.replace(/[^0-9]/g, '');
-                if(v.length > 3 && v.length <= 7) v = v.slice(0,3) + '-' + v.slice(3);
-                else if(v.length > 7) v = v.slice(0,3) + '-' + v.slice(3,7) + '-' + v.slice(7,11);
-                this.value = v;
+                let val = this.value.replace(/[^0-9]/g, '');
+                if(val.length > 3 && val.length <= 7) val = val.slice(0,3) + '-' + val.slice(3);
+                else if(val.length > 7) val = val.slice(0,3) + '-' + val.slice(3,7) + '-' + val.slice(7,11);
+                this.value = val;
             });
 
-            io.addEventListener('change', function() {
-                ot.disabled = !this.checked;
-                if(this.checked) { ot.focus(); ot.classList.remove('cursor-pointer'); } 
-                else { ot.value = ''; ot.classList.add('cursor-pointer'); }
-            });
-
-            ot.addEventListener('click', function() {
-                if(!io.checked) { io.checked = true; io.dispatchEvent(new Event('change')); }
-            });
-
-            b.addEventListener('click', () => {
-                const rf = [ {id: 'company', n: '소속 회사'}, {id: 'team', n: '소속 팀'}, {id: 'name', n: '성함'}, {id: 'phone', n: '휴대폰 번호'} ];
-                let he = false;
-
-                for (let f of rf) {
-                    const el = document.getElementById(f.id);
-                    if (!el.value.trim()) { se(el, `${f.n} 항목을 입력해주세요.`); he = true; break; }
+            interestOther.addEventListener('change', function() {
+                otherText.disabled = !this.checked;
+                if(this.checked) {
+                    otherText.focus();
+                    otherText.classList.remove('cursor-pointer');
+                } else {
+                    otherText.value = '';
+                    otherText.classList.add('cursor-pointer');
                 }
-                if (he) return;
+            });
 
-                const ar = document.getElementById('agreeRequired');
-                if (!ar.checked) { se(ar.closest('label'), '필수 개인정보 수집 동의가 필요합니다.'); return; }
+            otherText.addEventListener('click', function() {
+                if(!interestOther.checked) {
+                    interestOther.checked = true;
+                    interestOther.dispatchEvent(new Event('change'));
+                }
+            });
 
-                let ins = [];
-                document.querySelectorAll('input[name="interest"]:checked').forEach(cb => ins.push(cb.value));
-                if(io.checked && ot.value.trim()) ins.push(ot.value.trim());
+            submitBtn.addEventListener('click', () => {
+                const requiredFields = [
+                    {id: 'company', name: '소속 회사'},
+                    {id: 'team', name: '소속 팀'},
+                    {id: 'name', name: '성함'},
+                    {id: 'phone', name: '휴대폰 번호'}
+                ];
+                let hasError = false;
 
-                const d = {
+                for (let field of requiredFields) {
+                    const el = document.getElementById(field.id);
+                    if (!el.value.trim()) {
+                        showError(el, `${field.name} 항목을 입력해주세요.`);
+                        hasError = true;
+                        break;
+                    }
+                }
+                if (hasError) return;
+
+                const agreeRequired = document.getElementById('agreeRequired');
+                const agreeRequiredContainer = agreeRequired.closest('label');
+                if (!agreeRequired.checked) {
+                    showError(agreeRequiredContainer, '필수 개인정보 수집 동의가 필요합니다.');
+                    return;
+                }
+
+                let interests = [];
+                document.querySelectorAll('input[name="interest"]:checked').forEach(cb => interests.push(cb.value));
+                if(interestOther.checked && otherText.value.trim()) interests.push(otherText.value.trim());
+
+                const data = {
                     company: document.getElementById('company').value,
                     team: document.getElementById('team').value,
                     name: document.getElementById('name').value,
                     phone: document.getElementById('phone').value,
                     email: document.getElementById('email').value || '미입력',
-                    interest: ins.length > 0 ? ins.join(', ') : '미선택',
-                    agreeRequired: ar.checked ? 'Y' : 'N',
-                    agreeOptional: ao.checked ? 'Y' : 'N'
+                    interest: interests.length > 0 ? interests.join(', ') : '미선택',
+                    agreeRequired: agreeRequired.checked ? 'Y' : 'N',
+                    agreeOptional: agreeOptional.checked ? 'Y' : 'N'
                 };
 
-                b.innerHTML = '<span class="loader"></span> 안전하게 제출 중...';
-                b.disabled = true;
-                b.classList.add('opacity-90', 'cursor-not-allowed', 'scale-[0.98]');
+                submitBtn.innerHTML = '<span class="loader"></span> 안전하게 제출 중...';
+                submitBtn.disabled = true;
+                submitBtn.classList.add('opacity-90', 'cursor-not-allowed', 'scale-[0.98]');
 
-                fetch(u, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(d) })
-                .then(r => r.json())
-                .then(rp => { ss(); })
-                .catch(e => {
-                    alert('네트워크 오류가 발생했습니다.');
-                    b.innerHTML = '<span>설문 제출하고 이벤트 응모하기</span>';
-                    b.disabled = false;
-                    b.classList.remove('opacity-90', 'cursor-not-allowed', 'scale-[0.98]');
+                fetch(GOOGLE_SCRIPT_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    body: JSON.stringify(data)
+                })
+                .then(res => res.json())
+                .then(response => {
+                    showSuccess();
+                })
+                .catch(err => {
+                    console.error('Fetch Error:', err);
+                    alert('네트워크 또는 권한 오류가 발생했습니다. 구글 앱스 스크립트의 배포 권한이 "모든 사용자(Anyone)"인지 확인해주세요.');
+                    submitBtn.innerHTML = '<span>설문 제출하고 이벤트 응모하기</span>';
+                    submitBtn.disabled = false;
+                    submitBtn.classList.remove('opacity-90', 'cursor-not-allowed', 'scale-[0.98]');
                 });
             });
 
-            function se(el, m) {
-                el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                el.classList.add('error-shake');
-                setTimeout(() => el.classList.remove('error-shake'), 400);
-                t.innerText = m; t.classList.remove('hidden'); t.classList.add('toast');
-                setTimeout(() => { t.classList.add('hidden'); t.classList.remove('toast'); }, 2500);
+            function showError(element, msg) {
+                element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                element.classList.add('error-shake');
+                setTimeout(() => element.classList.remove('error-shake'), 400);
+                
+                toast.innerText = msg;
+                toast.classList.remove('hidden'); 
+                toast.classList.add('toast');
+                setTimeout(() => { 
+                    toast.classList.add('hidden'); 
+                    toast.classList.remove('toast'); 
+                }, 2500);
             }
 
-            function ss() {
+            function showSuccess() {
                 document.getElementById('surveyForm').classList.add('hidden');
                 document.getElementById('mainContainer').classList.remove('bg-white');
                 document.getElementById('mainContainer').classList.add('bg-transparent', 'shadow-none');
                 
-                const s = document.getElementById('successScreen');
-                s.classList.remove('hidden'); s.classList.add('flex');
+                const successScreen = document.getElementById('successScreen');
+                successScreen.classList.remove('hidden');
+                successScreen.classList.add('flex');
                 window.scrollTo({ top: 0, behavior: 'smooth' });
 
                 if (typeof confetti === 'function') {
-                    const dr = 2500;
-                    const ae = Date.now() + dr;
-                    const df = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 100 };
+                    const duration = 2500;
+                    const animationEnd = Date.now() + duration;
+                    const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 100 };
 
-                    function rir(min, max) { return Math.random() * (max - min) + min; }
+                    function randomInRange(min, max) {
+                        return Math.random() * (max - min) + min;
+                    }
 
-                    const iv = setInterval(function() {
-                        const tl = ae - Date.now();
-                        if (tl <= 0) return clearInterval(iv);
-                        const pc = 50 * (tl / dr);
-                        confetti(Object.assign({}, df, { particleCount: pc, origin: { x: rir(0.1, 0.3), y: Math.random() - 0.2 }, colors: ['#3617CE', '#5238DF', '#FDE047', '#10B981'] }));
-                        confetti(Object.assign({}, df, { particleCount: pc, origin: { x: rir(0.7, 0.9), y: Math.random() - 0.2 }, colors: ['#3617CE', '#5238DF', '#FDE047', '#10B981'] }));
+                    const interval = setInterval(function() {
+                        const timeLeft = animationEnd - Date.now();
+
+                        if (timeLeft <= 0) {
+                            return clearInterval(interval);
+                        }
+
+                        const particleCount = 50 * (timeLeft / duration);
+                        confetti(Object.assign({}, defaults, { 
+                            particleCount,
+                            origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 },
+                            colors: ['#3617CE', '#5238DF', '#FDE047', '#10B981']
+                        }));
+                        confetti(Object.assign({}, defaults, { 
+                            particleCount,
+                            origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 },
+                            colors: ['#3617CE', '#5238DF', '#FDE047', '#10B981']
+                        }));
                     }, 250);
                 }
             }
@@ -377,3 +424,6 @@
     </script>
 </body>
 </html>
+
+
+```
