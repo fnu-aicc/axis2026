@@ -337,7 +337,7 @@
                     company: document.getElementById('company').value,
                     team: document.getElementById('team').value,
                     name: document.getElementById('name').value,
-                    phone: document.getElementById('phone').value,
+                    phone: document.getElementById('phone').value.replace(/-/g, ''),
                     email: document.getElementById('email').value || '미입력',
                     interest: interests.length > 0 ? interests.join(', ') : '미선택',
                     agreeRequired: agreeRequired.checked ? 'Y' : 'N',
