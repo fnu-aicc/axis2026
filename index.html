@@ -338,11 +338,6 @@
                     showError(agreeRequiredContainer, '필수 개인정보 수집 동의가 필요합니다.');
                     return;
                 }
-
-                let interests = [];
-                document.querySelectorAll('input[name="interest"]:checked').forEach(cb => interests.push(cb.value));
-                if(interestOther.checked && otherText.value.trim()) interests.push(otherText.value.trim());
-
                 const data = {
                     company: document.getElementById('company').value,
                     team: document.getElementById('team').value,
