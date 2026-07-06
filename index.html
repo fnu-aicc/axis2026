@@ -112,7 +112,7 @@
                 <div class="flex items-center justify-between mb-5">
                     <div class="flex items-center">
                         <div class="w-6 h-6 rounded-full bg-skt_bg text-skt font-bold text-sm flex items-center justify-center mr-2">2</div>
-                        <h2 class="text-lg font-bold text-gray-800">관심 분야 및 CS 고민</h2>
+                        <h2 class="text-lg font-bold text-gray-800">관심 분야 및 CS 고민 <span class="text-red-500">*</span></h2>
                     </div>
                     <span class="text-[10px] font-medium bg-gray-100 text-gray-500 px-2 py-1 rounded-md">다중 선택</span>
                 </div>
@@ -142,7 +142,7 @@
                             <div class="icon-bg w-8 h-8 rounded-full bg-gray-50 flex items-center justify-center mb-2 transition-colors">
                                 <svg class="w-4 h-4 text-gray-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
                             </div>
-                            <span class="text-[13px] font-bold leading-tight"고객 민원<br>VOC 대응</span>
+                            <span class="text-[13px] font-bold leading-tight">고객 민원 등<br>VOC 대응</span>
                         </div>
                     </label>
                     <label class="relative cursor-pointer active:scale-95 transition-transform">
@@ -178,7 +178,7 @@
                     </div>
                     <div id="reqContent" class="dropdown-content bg-white px-4 border-t border-gray-100">
                         <div class="py-3 space-y-1 text-xs text-gray-500 leading-relaxed">
-                            <p><strong class="text-gray-700">수집 목적:</strong> 이벤트 참여 및 참여 확인 문자 수신, 당첨자 안내 및 경품 지급 </p>
+                            <p><strong class="text-gray-700">수집 목적:</strong> 이벤트 참여 및 인증 문자 수신, 당첨 안내 및 경품 지급 </p>
                             <p><strong class="text-gray-700">수집 항목:</strong> 소속 회사, 소속 팀, 성함, 휴대폰 번호</p>
                             <p><strong class="text-gray-700">보유 기간:</strong> 이벤트 종료 및 경품 지급 완료 후 1개월 이내 파기</p>
                             <p class="text-red-500"><strong class="text-red-500">동의 거부:</strong> 거부할 권리가 있으나, 거부 시 이벤트 참여 및 경품 수령이 제한</p>
@@ -205,7 +205,7 @@
                             <p><strong class="text-gray-700">수집 목적:</strong> 컨설팅, 상담 목적의 연락(전화, 문자, 이메일 등)</p>
                             <p><strong class="text-gray-700">수집 항목:</strong> 소속 회사, 소속 팀, 성함, 휴대폰 번호, 이메일 </p>
                             <p><strong class="text-gray-700">보유 기간:</strong> 동의일로부터 3개월(또는 정보주체의 동의 철회 시까지)</p>
-                            <p><strong class="text-gray-700">동의 거부:</strong> 거부할 권리가 있으나, 관련 자료 및 상담 제공 제한</p>
+                            <p class="text-red-500"><strong class="text-red-500">동의 거부:</strong> 거부할 권리가 있으나, 관련 자료 및 상담 제공 제한</p>
                         </div>
                     </div>
                 </div>
@@ -233,7 +233,7 @@
                     <h3 class="text-xl font-bold text-gray-800 mb-2">설문 신청 완료!</h3>
                     <div class="bg-gray-50 rounded-xl p-4 mt-4 border border-gray-100">
                         <p class="text-[13px] text-gray-600 font-medium leading-relaxed">
-                            인증 문자가 곧 발송 됩니다.<br>>
+                            인증 문자가 곧 발송 됩니다.<br>
                             <span class="text-skt font-bold text-base mt-1 inline-block">인증 문자를 부서 스태프에게 보여주시고<br>경품 이벤트에 참여해 주세요 🎉</span>
                         </p>
                     </div>
@@ -322,6 +322,16 @@
                 }
                 if (hasError) return;
 
+                let interests = [];
+                document.querySelectorAll('input[name="interest"]:checked').forEach(cb => interests.push(cb.value));
+                if(interestOther.checked && otherText.value.trim()) interests.push(otherText.value.trim());
+
+                if (interests.length === 0) {
+                    const interestContainer = document.getElementById('interestGroup');
+                    showError(interestContainer, '관심 분야 및 CS 고민을 최소 1개 이상 선택해주세요.');
+                return;
+                }
+                
                 const agreeRequired = document.getElementById('agreeRequired');
                 const agreeRequiredContainer = agreeRequired.closest('label');
                 if (!agreeRequired.checked) {
