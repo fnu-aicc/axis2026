@@ -142,7 +142,7 @@
                             <div class="icon-bg w-8 h-8 rounded-full bg-gray-50 flex items-center justify-center mb-2 transition-colors">
                                 <svg class="w-4 h-4 text-gray-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
                             </div>
-                            <span class="text-[13px] font-bold leading-tight">악성/불만<br>VOC 대응</span>
+                            <span class="text-[13px] font-bold leading-tight"고객 민원<br>VOC 대응</span>
                         </div>
                     </label>
                     <label class="relative cursor-pointer active:scale-95 transition-transform">
@@ -151,7 +151,7 @@
                             <div class="icon-bg w-8 h-8 rounded-full bg-gray-50 flex items-center justify-center mb-2 transition-colors">
                                 <svg class="w-4 h-4 text-gray-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
                             </div>
-                            <span class="text-[13px] font-bold leading-tight">상담사 채용 및<br>인력 관리</span>
+                            <span class="text-[13px] font-bold leading-tight">상담사 채용 등<br>인력 관리</span>
                         </div>
                     </label>
                     <div class="col-span-2 relative group focus-within:ring-2 focus-within:ring-skt/30 rounded-2xl transition-all">
@@ -178,7 +178,7 @@
                     </div>
                     <div id="reqContent" class="dropdown-content bg-white px-4 border-t border-gray-100">
                         <div class="py-3 space-y-1 text-xs text-gray-500 leading-relaxed">
-                            <p><strong class="text-gray-700">수집 목적:</strong> 이벤트 참여 확인, 당첨자 안내 및 경품 지급 </p>
+                            <p><strong class="text-gray-700">수집 목적:</strong> 이벤트 참여 및 참여 확인 문자 수신, 당첨자 안내 및 경품 지급 </p>
                             <p><strong class="text-gray-700">수집 항목:</strong> 소속 회사, 소속 팀, 성함, 휴대폰 번호</p>
                             <p><strong class="text-gray-700">보유 기간:</strong> 이벤트 종료 및 경품 지급 완료 후 1개월 이내 파기</p>
                             <p class="text-red-500"><strong class="text-red-500">동의 거부:</strong> 거부할 권리가 있으나, 거부 시 이벤트 참여 및 경품 수령이 제한</p>
@@ -202,7 +202,7 @@
                     </div>
                     <div id="optContent" class="dropdown-content bg-white px-4 border-t border-gray-100">
                         <div class="py-3 space-y-1 text-xs text-gray-500 leading-relaxed">
-                            <p><strong class="text-gray-700">수집 목적:</strong> 컨설팅, 상담 목적의 연락(전화, 문자 등)</p>
+                            <p><strong class="text-gray-700">수집 목적:</strong> 컨설팅, 상담 목적의 연락(전화, 문자, 이메일 등)</p>
                             <p><strong class="text-gray-700">수집 항목:</strong> 소속 회사, 소속 팀, 성함, 휴대폰 번호, 이메일 </p>
                             <p><strong class="text-gray-700">보유 기간:</strong> 동의일로부터 3개월(또는 정보주체의 동의 철회 시까지)</p>
                             <p><strong class="text-gray-700">동의 거부:</strong> 거부할 권리가 있으나, 관련 자료 및 상담 제공 제한</p>
@@ -233,8 +233,8 @@
                     <h3 class="text-xl font-bold text-gray-800 mb-2">설문 신청 완료!</h3>
                     <div class="bg-gray-50 rounded-xl p-4 mt-4 border border-gray-100">
                         <p class="text-[13px] text-gray-600 font-medium leading-relaxed">
-                            부스 스태프에게 이 화면을 보여주시고<br>
-                            <span class="text-skt font-bold text-base mt-1 inline-block">경품 이벤트에 참여해 주세요 🎉</span>
+                            인증 문자가 곧 발송 됩니다.<br>>
+                            <span class="text-skt font-bold text-base mt-1 inline-block">인증 문자를 부서 스태프에게 보여주시고<br>경품 이벤트에 참여해 주세요 🎉</span>
                         </p>
                     </div>
                 </div>
@@ -359,7 +359,7 @@
                 })
                 .catch(err => {
                     console.error('Fetch Error:', err);
-                    alert('네트워크 또는 권한 오류가 발생했습니다. 구글 앱스 스크립트의 배포 권한이 "모든 사용자(Anyone)"인지 확인해주세요.');
+                    alert('오류가 발생했습니다. 다시 제출해주세요.');
                     submitBtn.innerHTML = '<span>설문 제출하고 이벤트 응모하기</span>';
                     submitBtn.disabled = false;
                     submitBtn.classList.remove('opacity-90', 'cursor-not-allowed', 'scale-[0.98]');
